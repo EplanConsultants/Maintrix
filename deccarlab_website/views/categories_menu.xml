@@ -1,0 +1,36 @@
+<odoo>
+
+    <template inherit_id="website_sale.products_categories_list" id="website_product_categories" active="True"
+              name="eCommerce Categories">
+        <xpath expr="//div[hasclass('wsale_products_categories_list')]" position="replace">
+            <div class="wsale_products_categories_list">
+                <ul class="nav d-flex flex-column my-2">
+                    <li class="nav-item mb-1">
+                        <div t-att-data-link-href="keep('/shop', category=0)" class="form-check d-inline-block">
+                        </div>
+                    </li>
+                    <t t-foreach="categories" t-as="c">
+                        <t t-call="website_sale.categories_recursive"/>
+                    </t>
+                </ul>
+            </div>
+        </xpath>
+    </template>
+    <template id="recursive_categ" inherit_id="website_sale.categories_recursive" name="Category list">
+        <xpath expr="//t" position="replace">
+            <li class="nav-item mb-1">
+                <t t-if="not c.child_id">
+                    <t t-call="website_sale.categorie_link"/>
+                </t>
+                <ul t-if="c.child_id" class="nav flex-column nav-hierarchy mt-1 ps-3">
+                    <t t-foreach="c.child_id" t-as="c">
+                        <t t-if="not search or c.id in search_categories_ids">
+                            <t t-call="website_sale.categories_recursive"/>
+                        </t>
+                    </t>
+                </ul>
+            </li>
+        </xpath>
+
+    </template>
+</odoo>
